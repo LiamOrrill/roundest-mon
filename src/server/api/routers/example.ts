@@ -2,7 +2,9 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-export const exampleRouter = createTRPCRouter({
+import { PokemonClient } from "pokenode-ts";
+
+export const pokemonRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
@@ -13,4 +15,12 @@ export const exampleRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.example.findMany();
   }),
+  getPokemonById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ input }) => {
+      const api = new PokemonClient();
+
+      const pokemon = await api.getPokemonById(input.id);
+      return pokemon;
+    }),
 });
