@@ -1,6 +1,12 @@
 import { type NextPage } from "next";
+import { api } from "~/utils/api";
 
 const Home: NextPage = () => {
+  const { data, isLoading } = api.example.hello.useQuery({ text: "Liam" });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  if (data) return <div>{data.greeting}</div>;
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="text-center text-2xl">Which Pokemon is Rounder?</div>
